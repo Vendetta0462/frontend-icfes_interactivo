@@ -425,7 +425,7 @@ button:active {
 
 /* Optional: Tooltip styling */
 .chatbot-bubble:hover::after {
-    content: 'Chat with us!';
+    content: 'Predice Un Puntaje!';
     position: absolute;
     bottom: 70px;
     left: 50%;
@@ -444,7 +444,7 @@ button:active {
     width: 40%;
     text-align: center;
     justify-content: center;
-    background-color: #000000;
+    background-color: var(--main-color);
     border-radius: 5% ;
     color: #fff;
     font-family: sans-serif;
@@ -491,10 +491,11 @@ button:active {
 .button-predict {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
-    border: none;
+    border: #000 1px;
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    width: 50%;
 }
 
 .button:hover {
@@ -510,4 +511,5 @@ button:active {
     padding-bottom: 50px;
     width: 100%;
     height: 200%;
+    
 }

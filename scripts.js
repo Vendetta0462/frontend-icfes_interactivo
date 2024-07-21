@@ -1069,43 +1069,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const labels = data.map(d => d.year);
         const datasets = [
             {
-                label: 'Puntaje Global',
-                data: data.map(d => d.promedio_global),
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 1
-            },
-            {
-                label: 'Puntaje Inglés',
-                data: data.map(d => d.promedio_ingles),
+                label: 'Puntaje Ciencias Ciudadanas',
+                data: data.map(d => d.promedio_c_ciudadana),
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Matemáticas',
-                data: data.map(d => d.promedio_matematicas),
+                label: 'Puntaje Comunicacion Escrita',
+                data: data.map(d => d.promedio_comuni_escrita),
                 borderColor: 'rgba(255, 206, 86, 1)',
                 backgroundColor: 'rgba(255, 206, 86, 0.2)',
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Ciencias Naturales',
-                data: data.map(d => d.promedio_c_naturales),
+                label: 'Puntaje Ingles',
+                data: data.map(d => d.promedio_ingles),
                 borderColor: 'rgba(153, 102, 255, 1)',
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Sociales y Ciudadanas',
-                data: data.map(d => d.promedio_sociales_ciudadanas),
+                label: 'Puntaje Lectura Critica',
+                data: data.map(d => d.promedio_lectura_critica),
                 borderColor: 'rgba(255, 159, 64, 1)',
                 backgroundColor: 'rgba(255, 159, 64, 0.2)',
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Lectura Crítica',
-                data: data.map(d => d.promedio_lectura_critica),
+                label: 'Puntaje Razonamiento Cuantitativo',
+                data: data.map(d => d.promedio_razona_cuantitativo),
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderWidth: 1
@@ -1372,7 +1365,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     y: {
                         title: {
                             display: true,
-                            text: 'Promedio Global'
+                            text: 'Puntaje'
                         }
                     }
                 }
