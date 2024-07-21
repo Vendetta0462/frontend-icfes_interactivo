@@ -18,7 +18,7 @@
         <div class="form-container-predict">
             <fieldset>
                 <div class="form-group">
-                    <label for="PERIODO">PERIODO</label>
+                    <label for="PERIODO">AÑO</label>
                     <select id="PERIODO" class="form-select">
                         <option value="2014">2014</option>
                         <option value="2015">2015</option>
@@ -33,32 +33,8 @@
                         <option value="2024">2024</option>
                     </select>
                 </div>
-            
                 <div class="form-group">
-                    <label for="COLE_AREA_UBICACION">COLE_AREA_UBICACION</label>
-                    <select id="COLE_AREA_UBICACION" class="form-select">
-                        <option value="URBANO">URBANO</option>
-                        <option value="RURAL">RURAL</option>
-                    </select>
-                </div>
-            
-                <div class="form-group">
-                    <label for="COLE_NATURALEZA">COLE_NATURALEZA</label>
-                    <select id="COLE_NATURALEZA" class="form-select">
-                        <option value="OFICIAL">OFICIAL</option>
-                        <option value="NO_OFICIAL">NO OFICIAL</option>
-                    </select>
-                </div>
-            
-                <div class="form-group">
-                    <label for="COLE_COD_DANE_ESTABLECIMIENTO">COLE_COD_DANE_ESTABLECIMIENTO</label>
-                    <select id="COLE_COD_DANE_ESTABLECIMIENTO" class="form-select">
-                        <option value="123456">123456</option>
-                    </select>
-                </div>
-            
-                <div class="form-group">
-                    <label for="COLE_DEPTO_UBICACION">COLE_DEPTO_UBICACION</label>
+                    <label for="COLE_DEPTO_UBICACION">DEPARTAMENTO DEL COLEGIO</label>
                     <select id="COLE_DEPTO_UBICACION" class="form-select" onchange="updateMunicipios()">
                         <option value="AMAZONAS">AMAZONAS</option>
                         <option value="ANTIOQUIA">ANTIOQUIA</option>
@@ -95,29 +71,54 @@
                         <option value="BOGOTÁ, D.C.">BOGOTÁ, D.C.</option>
                     </select>
                 </div>
-            
                 <div class="form-group">
-                    <label for="COLE_MCIO_UBICACION">COLE_MCIO_UBICACION</label>
+                    <label for="COLE_MCIO_UBICACION">MUNICIPIO DEL COLEGIO</label>
                     <select id="COLE_MCIO_UBICACION" class="form-select">
                         <option value="">Selecciona un municipio</option>
                     </select>
                 </div>
+                <div class="form-group hidden">
+                    <label for="COLE_AREA_UBICACION">COLE_AREA_UBICACION</label>
+                    <select id="COLE_AREA_UBICACION" class="form-select">
+                        <option value="URBANO">URBANO</option>
+                        <option value="RURAL">RURAL</option>
+                    </select>
+                </div>
             
+                <div class="form-group hidden">
+                    <label for="COLE_NATURALEZA">COLE_NATURALEZA</label>
+                    <select id="COLE_NATURALEZA" class="form-select">
+                        <option value="OFICIAL">OFICIAL</option>
+                        <option value="NO_OFICIAL">NO OFICIAL</option>
+                    </select>
+                </div>
                 <div class="form-group">
-                    <label for="COLE_NOMBRE_ESTABLECIMIENTO">COLE_NOMBRE_ESTABLECIMIENTO</label>
+                    <label for="COLE_NOMBRE_ESTABLECIMIENTO">NOMBRE DEL COLEGIO</label>
                     <select id="COLE_NOMBRE_ESTABLECIMIENTO" class="form-select" onchange="updateCodigoDane()">
                         <option value="INSTITUCION EDUCATIVA EJEMPLO">INSTITUCION EDUCATIVA EJEMPLO</option>
                     </select>
                 </div>
-            
                 <div class="form-group">
+                    <label for="COLE_COD_DANE_ESTABLECIMIENTO">CODIGO DANE DEL COLEGIO</label>
+                    <select id="COLE_COD_DANE_ESTABLECIMIENTO" class="form-select">
+                        <option value="123456">123456</option>
+                    </select>
+                </div>
+            
+                
+            
+                
+            
+               
+            
+                <div class="form-group hidden">
                     <label for="ESTU_DEPTO_PRESENTACION">ESTU_DEPTO_PRESENTACION</label>
                     <select id="ESTU_DEPTO_PRESENTACION" class="form-select">
                         <option value="BOGOTA">BOGOTA</option>
                     </select>
                 </div>
             
-                <div class="form-group">
+                <div class="form-group hidden">
                     <label for="ESTU_MCIO_PRESENTACION">ESTU_MCIO_PRESENTACION</label>
                     <select id="ESTU_MCIO_PRESENTACION" class="form-select">
                         <option value="BOGOTA">BOGOTA</option>
@@ -125,12 +126,12 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="ESTU_FECHANACIMIENTO">ESTU_FECHANACIMIENTO</label>
+                    <label for="ESTU_FECHANACIMIENTO">FECHANACIMIENTO DE ESTUDIANTE</label>
                     <input type="date" id="ESTU_FECHANACIMIENTO" name="ESTU_FECHANACIMIENTO" class="form-select">
                 </div>
             
                 <div class="form-group">
-                    <label for="ESTU_GENERO">ESTU_GENERO</label>
+                    <label for="ESTU_GENERO">GENERO ESTUDIANTE</label>
                     <select id="ESTU_GENERO" class="form-select">
                         <option value="M">M</option>
                         <option value="F">F</option>
@@ -138,7 +139,7 @@
                 </div>
             
                 <div class="form-group">
-                    <label for="FAMI_ESTRATOVIVIENDA">FAMI_ESTRATOVIVIENDA</label>
+                    <label for="FAMI_ESTRATOVIVIENDA">ESTRATO FAMILIAR DE VIVIENDA</label>
                     <select id="FAMI_ESTRATOVIVIENDA" class="form-select">
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -150,7 +151,7 @@
                 </div>
             
                 <div class="button-container">
-                    <button class="button" onclick="hacerPrediccion()">Hacer Predicción</button>
+                    <button class="button-predict" onclick="hacerPrediccion()">Hacer Predicción</button>
                 </div>
             </fieldset>
         </div>
