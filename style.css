@@ -491,7 +491,11 @@ button:active {
     background-color: #848da3;
 }
 #new-container-predict {
-    padding-bottom: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 5px;
     margin-left: 2.5%;
     width: 100%;
     height: 200%;
