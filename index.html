@@ -15,7 +15,11 @@
             
         </div>
     </header>
-
+    <div class="carga hidden">
+    <div id="loadingScreen-ini" class="loading-screen">
+        <div class="loader"></div>
+    </div>
+</div>
     <main>
 
             <div class="button-container" >
@@ -198,7 +202,8 @@
             
            <p>Bienvenido a la herramienta de análisis para Saber 11. Aquí podrás ver datos como los puntajes globales y en áreas específicas de los estudiantes en diferentes años.</p> 
            <p>Esta herramienta está diseñada para proporcionar una visión clara y comprensible del desempeño académico en las pruebas Saber 11 en Colombia. Con ella, podrás identificar patrones, tendencias y brechas en el rendimiento educativo a lo largo del tiempo.</p>
-           <p>Utiliza los controles deslizantes sobre el mapa para seleccionar el rango de años que deseas analizar. El mapa te mostrará reflejara las puntuaciones promedio por departamento, y el gráfico cambiará dinámicamente para reflejar la información seleccionada.</p>   
+           <p>Utiliza los controles deslizantes sobre el mapa para seleccionar el rango de años que deseas analizar. El mapa te mostrará las puntuaciones promedio por departamento reflejado en el color, y el gráfico cambiará dinámicamente para reflejar la información seleccionada.</p>
+           <p>Para obtener información detallada de cada departamento, selecciona el departamento en el mapa. Luego, haz clic en el botón "Consultar Información" para acceder a un apartado donde podrás aplicar filtros a la visualización.  </p>   
         </div>
         
             <div class="chart-canvas-container">
@@ -440,8 +445,9 @@
             
            <p>Bienvenido a la herramienta de análisis para Saber Pro. Aquí podrás explorar datos detallados sobre los puntajes globales y en áreas específicas de los estudiantes universitarios en diferentes años.</p> 
            <p>Esta herramienta está diseñada para proporcionar una visión clara y comprensible del desempeño académico en las pruebas Saber Pro en Colombia. Con ella, podrás identificar patrones, tendencias y brechas en el rendimiento educativo de los estudiantes de educación superior a lo largo del tiempo.</p>
-           <p>Utiliza los controles deslizantes sobre el mapa para seleccionar el rango de años que deseas analizar. El mapa te mostrará las puntuaciones promedio por departamento, y el gráfico cambiará dinámicamente para reflejar la información seleccionada. Así podrás realizar un análisis comparativo y obtener insights valiosos sobre la calidad educativa en las instituciones de educación superior en distintas regiones del país. </div>
-        
+            <p>Utiliza los controles sobre el mapa para seleccionar el rango de años y la prueba específica que deseas analizar. El mapa te mostrará las puntuaciones promedio por departamento reflejadas en su color, y el gráfico cambiará dinámicamente. </p>
+            <p>Para obtener información detallada de cada departamento, selecciona el departamento en el mapa. Luego, haz clic en el botón "Consultar Información" para acceder a un apartado donde podrás aplicar filtros a la visualización.</P></div>
+
             <div class="chart-canvas-container">
                 <canvas id="lineChart-saberpro" class="not-hidden"></canvas>
                 <canvas id="polarAreaChart-saberpro" class="hidden"></canvas>
@@ -505,7 +511,7 @@
        
 </div> 
 <div class="chatbot-bubble">
-    <a href="predict.html" target="_blank">
+    <a href="predict.html" target="">
         <img src="C:\Users\jorge\Downloads\font-main\font-main\14558.png" alt="Chatbot" class="chat-icon">
     </a>
 </div>

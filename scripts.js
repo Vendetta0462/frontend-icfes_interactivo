@@ -315,6 +315,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const grafico = document.querySelector('.grafico');
     let selectedDepartment = null;
 
+    const carga = document.querySelector('.carga');
+
     // Ensure required elements are present in the DOM
     if (!sliderMinPro || !sliderMaxPro || !consultarButton || !txtDepartamento11 || !filtros) {
         console.error('Missing required elements in the DOM');
@@ -460,7 +462,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const visualizacionSelect = document.getElementById('filtros');
         visualizacionSelect.value = 'historico'
-    
+        
+        carga.classList.remove('hidden')
+
         // Fetch data from the specified URL
         fetch(url_consulta, {mode: 'no-cors'})
             .then(response => response.text()) // Get response as text
@@ -519,6 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let data = textData;
                 console.log('Parsed data:', data);
                 crearGrafica(data);
+                carga.classList.add('hidden');
             })
             .catch(error => console.error('Error:', error));
     }
@@ -1025,6 +1030,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const graficoPro = document.querySelector('.graficoPro');
     let selectedDepartment = null;
 
+    const carga = document.querySelector('.carga');
+
     // Ensure required elements are present in the DOM
     if (!sliderMinPro || !sliderMaxPro || !consultarButtonPro || !txtDepartamentoPro || !filtrosPro) {
         console.error('Missing required elements in the DOM');
@@ -1069,43 +1076,36 @@ document.addEventListener('DOMContentLoaded', () => {
         const labels = data.map(d => d.year);
         const datasets = [
             {
-                label: 'Puntaje Global',
-                data: data.map(d => d.promedio_global),
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                borderWidth: 1
-            },
-            {
-                label: 'Puntaje Inglés',
-                data: data.map(d => d.promedio_ingles),
+                label: 'Puntaje Ciencias Ciudadanas',
+                data: data.map(d => d.promedio_c_ciudadana),
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Matemáticas',
-                data: data.map(d => d.promedio_matematicas),
+                label: 'Puntaje Comunicacion Escrita',
+                data: data.map(d => d.promedio_comuni_escrita),
                 borderColor: 'rgba(255, 206, 86, 1)',
                 backgroundColor: 'rgba(255, 206, 86, 0.2)',
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Ciencias Naturales',
-                data: data.map(d => d.promedio_c_naturales),
+                label: 'Puntaje Ingles',
+                data: data.map(d => d.promedio_ingles),
                 borderColor: 'rgba(153, 102, 255, 1)',
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Sociales y Ciudadanas',
-                data: data.map(d => d.promedio_sociales_ciudadanas),
+                label: 'Puntaje Lectura Critica',
+                data: data.map(d => d.promedio_lectura_critica),
                 borderColor: 'rgba(255, 159, 64, 1)',
                 backgroundColor: 'rgba(255, 159, 64, 0.2)',
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Lectura Crítica',
-                data: data.map(d => d.promedio_lectura_critica),
+                label: 'Puntaje Razonamiento Cuantitativo',
+                data: data.map(d => d.promedio_razona_cuantitativo),
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderWidth: 1
@@ -1163,6 +1163,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const visualizacionSelect = document.getElementById('filtrosP');
         visualizacionSelect.value = 'historico';
     
+        carga.classList.remove('hidden');
+        
         fetch(url_consulta, {mode: 'no-cors'})
             .then(response => response.text())
             .then(textData => {
@@ -1170,7 +1172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log('Parsed data:', data);
                 filtrosPro.classList.remove('hidden');
                 graficoPro.classList.remove('hidden');
-                crearGraficaPro(data);
+                // crearGraficaPro(data);
             })
             .catch(error => console.error('Error fetching data:', error))
             .then(() => {
@@ -1213,6 +1215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let data = textData;
                 console.log('Parsed data:', data);
                 crearGraficaPro(data);
+                carga.classList.add('hidden');
             })
             .catch(error => console.error('Error:', error));
     }
@@ -1372,7 +1375,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     y: {
                         title: {
                             display: true,
-                            text: 'Promedio Global'
+                            text: 'Puntaje'
                         }
                     }
                 }
@@ -1381,5 +1384,178 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+
+
+
+var colegiosData = [];
+
+function updateMunicipios() {
+    var depto = document.getElementById("COLE_DEPTO_UBICACION").value;
+    fetch(`http://181.236.87.123:5000/predict/get_municipios/${depto}`)
+        .then(response => response.json())
+        .then(data => {
+            var municipioSelect = document.getElementById("COLE_MCIO_UBICACION");
+            municipioSelect.innerHTML = "";
+            if (Array.isArray(data)) {
+                data.forEach(function(municipio) {
+                    var option = document.createElement("option");
+                    option.value = municipio.cole_mcpio_ubicacion;
+                    option.text = municipio.cole_mcpio_ubicacion;
+                    municipioSelect.add(option);
+                });
+                updateEstuMpios();
+                updateColegios();
+            } else {
+                var option = document.createElement("option");
+                option.value = "";
+                option.text = "No hay municipios disponibles";
+                municipioSelect.add(option);
+            }
+        });
+        updateEstuDeptos(); 
+}
+
+function updateColegios() {
+    var depto = document.getElementById("COLE_DEPTO_UBICACION").value;
+    var municipio = document.getElementById("COLE_MCIO_UBICACION").value;
+    fetch(`http://181.236.87.123:5000/predict/get_colegio/${depto}/${municipio}`)
+        .then(response => response.json())
+        .then(data => {
+            colegiosData = data;  // Guardar la data para usarla después
+            var colegioSelect = document.getElementById("COLE_NOMBRE_ESTABLECIMIENTO");
+            colegioSelect.innerHTML = "";
+            if (Array.isArray(data)) {
+                data.forEach(function(colegio) {
+                    var option = document.createElement("option");
+                    option.value = colegio.COLE_NOMBRE_ESTABLECIMIENTO;
+                    option.text = colegio.COLE_NOMBRE_ESTABLECIMIENTO;
+                    colegioSelect.add(option);
+                });
+            } else {
+                var option = document.createElement("option");
+                option.value = "";
+                option.text = "No hay colegios disponibles";
+                colegioSelect.add(option);
+            }
+        });
+}
+
+function updateCodigoDane() {
+    var colegioSelect = document.getElementById("COLE_NOMBRE_ESTABLECIMIENTO");
+    var selectedColegio = colegioSelect.value;
+    var codDaneSelect = document.getElementById("COLE_COD_DANE_ESTABLECIMIENTO");
+    
+
+    var colegio = colegiosData.find(function(c) {
+        return c.COLE_NOMBRE_ESTABLECIMIENTO === selectedColegio;
+    });
+
+    if (colegio) {
+        codDaneSelect.innerHTML = `<option value="${colegio.COLE_COD_DANE_ESTABLECIMIENTO}">${colegio.COLE_COD_DANE_ESTABLECIMIENTO}</option>`;
+    } else {
+        codDaneSelect.innerHTML = `<option value="">Selecciona un colegio primero</option>`;
+    }
+}
+
+function updateEstuDeptos() {
+    var deptoSelect = document.getElementById("COLE_DEPTO_UBICACION");
+    var estuDeptoSelect = document.getElementById("ESTU_DEPTO_PRESENTACION");
+    estuDeptoSelect.innerHTML = deptoSelect.innerHTML;
+    estuDeptoSelect.value = deptoSelect.value;
+}
+
+function updateEstuMpios() {
+    var mpioSelect = document.getElementById("COLE_MCIO_UBICACION");
+    var estuMpioSelect = document.getElementById("ESTU_MCIO_PRESENTACION");
+    estuMpioSelect.innerHTML = mpioSelect.innerHTML;
+    estuMpioSelect.value = mpioSelect.value;
+}
+
+function hacerPrediccion() {
+    
+    var carga = document.querySelector(".carga");
+
+    carga.classList.remove('hidden')
+
+    var texto_pred = document.getElementById('prediccion-texto')
+
+    var modal = document.getElementById("myPrediction");
+
+    var span = document.getElementsByClassName("close_predict")[0];
+
+
+
+    var data = {
+        PERIODO: document.getElementById("PERIODO").value,
+        COLE_AREA_UBICACION: document.getElementById("COLE_AREA_UBICACION").value,
+        COLE_NATURALEZA: document.getElementById("COLE_NATURALEZA").value,
+        COLE_COD_DANE_ESTABLECIMIENTO: document.getElementById("COLE_COD_DANE_ESTABLECIMIENTO").value,
+        COLE_DEPTO_UBICACION: document.getElementById("COLE_DEPTO_UBICACION").value,
+        COLE_MCIO_UBICACION: document.getElementById("COLE_MCIO_UBICACION").value,
+        COLE_NOMBRE_ESTABLECIMIENTO: document.getElementById("COLE_NOMBRE_ESTABLECIMIENTO").value,
+        ESTU_DEPTO_PRESENTACION: document.getElementById("ESTU_DEPTO_PRESENTACION").value,
+        ESTU_MCIO_PRESENTACION: document.getElementById("ESTU_MCIO_PRESENTACION").value,
+        ESTU_FECHANACIMIENTO: document.getElementById("ESTU_FECHANACIMIENTO").value,
+        ESTU_GENERO: document.getElementById("ESTU_GENERO").value,
+        FAMI_ESTRATOVIVIENDA: document.getElementById("FAMI_ESTRATOVIVIENDA").value
+    };
+
+    fetch('http://181.236.87.123:5001/makepredict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        // alert('Predicción realizada: ' + JSON.stringify(result));
+        modal.style.display = "block";
+        texto = 'Puntaje Predicho: ' + JSON.stringify(result['data'])
+        texto_pred.textContent = texto
+
+        carga.classList.add('hidden')
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error realizando la predicción');
+    });
+
+    // Cuando el usuario hace clic en <span> (x), cierra el modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Cuando el usuario hace clic en cualquier parte fuera del modal, cierra el modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener el modal
+    var modal = document.getElementById("myModal");
+
+    // Obtener el <span> que cierra el modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // Mostrar el modal automáticamente al cargar la página
+    modal.style.display = "block";
+
+    // Cuando el usuario hace clic en <span> (x), cierra el modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Cuando el usuario hace clic en cualquier parte fuera del modal, cierra el modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+});
 
 
