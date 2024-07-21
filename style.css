@@ -433,3 +433,15 @@ button:active {
     background-color: #000000;
     border-radius: 5% ;
 }
+.form-container-predict fieldset {
+    border: none;
+    padding: 10px;
+    justify-content: center;
+    font-size: auto;
+}
+    
+.form-container-predict select {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+}
