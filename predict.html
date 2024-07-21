@@ -17,115 +17,138 @@
     <div id="new-container">
         <div class="form-container-predict">
             <fieldset>
-                <label for="PERIODO">PERIODO</label>
-                <select id="PERIODO" class="form-select">
-                    <option value="2014">2014</option>
-                    <option value="2015">2015</option>
-                    <option value="2016">2016</option>
-                    <option value="2017">2017</option>
-                    <option value="2018">2018</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                </select>
-
-                <label for="COLE_AREA_UBICACION">COLE_AREA_UBICACION</label>
-                <select id="COLE_AREA_UBICACION" class="form-select">
-                    <option value="URBANO">URBANO</option>
-                    <option value="RURAL">RURAL</option>
-                </select>
-
-                <label for="COLE_NATURALEZA">COLE_NATURALEZA</label>
-                <select id="COLE_NATURALEZA" class="form-select">
-                    <option value="OFICIAL">OFICIAL</option>
-                    <option value="NO_OFICIAL">NO OFICIAL</option>
-                </select>
-
-                <label for="COLE_COD_DANE_ESTABLECIMIENTO">COLE_COD_DANE_ESTABLECIMIENTO</label>
-                <select id="COLE_COD_DANE_ESTABLECIMIENTO" class="form-select">
-                    <option value="123456">123456</option>
-                </select>
-
-                <label for="COLE_DEPTO_UBICACION">COLE_DEPTO_UBICACION</label>
-                <select id="COLE_DEPTO_UBICACION" class="form-select" onchange="updateMunicipios()">
-                    <option value="AMAZONAS">AMAZONAS</option>
-                    <option value="ANTIOQUIA">ANTIOQUIA</option>
-                    <option value="ARAUCA">ARAUCA</option>
-                    <option value="ATLÁNTICO">ATLÁNTICO</option>
-                    <option value="BOLÍVAR">BOLÍVAR</option>
-                    <option value="BOYACÁ">BOYACÁ</option>
-                    <option value="CALDAS">CALDAS</option>
-                    <option value="CAQUETÁ">CAQUETÁ</option>
-                    <option value="CASANARE">CASANARE</option>
-                    <option value="CAUCA">CAUCA</option>
-                    <option value="CESAR">CESAR</option>
-                    <option value="CHOCÓ">CHOCÓ</option>
-                    <option value="CÓRDOBA">CÓRDOBA</option>
-                    <option value="CUNDINAMARCA">CUNDINAMARCA</option>
-                    <option value="GUAINÍA">GUAINÍA</option>
-                    <option value="GUAVIARE">GUAVIARE</option>
-                    <option value="HUILA">HUILA</option>
-                    <option value="LA GUAJIRA">LA GUAJIRA</option>
-                    <option value="MAGDALENA">MAGDALENA</option>
-                    <option value="META">META</option>
-                    <option value="NARIÑO">NARIÑO</option>
-                    <option value="NORTE DE SANTANDER">NORTE DE SANTANDER</option>
-                    <option value="PUTUMAYO">PUTUMAYO</option>
-                    <option value="QUINDÍO">QUINDÍO</option>
-                    <option value="RISARALDA">RISARALDA</option>
-                    <option value="SAN ANDRÉS Y PROVIDENCIA">SAN ANDRÉS Y PROVIDENCIA</option>
-                    <option value="SANTANDER">SANTANDER</option>
-                    <option value="SUCRE">SUCRE</option>
-                    <option value="TOLIMA">TOLIMA</option>
-                    <option value="VALLE DEL CAUCA">VALLE DEL CAUCA</option>
-                    <option value="VAUPÉS">VAUPÉS</option>
-                    <option value="VICHADA">VICHADA</option>
-                    <option value="BOGOTÁ, D.C.">BOGOTÁ, D.C.</option>
-                </select>
-
-                <label for="COLE_MCIO_UBICACION">COLE_MCIO_UBICACION</label>
-                <select id="COLE_MCIO_UBICACION" class="form-select">
-                    <option value="">Selecciona un municipio</option>
-                </select>
-
-                <label for="COLE_NOMBRE_ESTABLECIMIENTO">COLE_NOMBRE_ESTABLECIMIENTO</label>
+                <div class="form-group">
+                    <label for="PERIODO">PERIODO</label>
+                    <select id="PERIODO" class="form-select">
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="COLE_AREA_UBICACION">COLE_AREA_UBICACION</label>
+                    <select id="COLE_AREA_UBICACION" class="form-select">
+                        <option value="URBANO">URBANO</option>
+                        <option value="RURAL">RURAL</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="COLE_NATURALEZA">COLE_NATURALEZA</label>
+                    <select id="COLE_NATURALEZA" class="form-select">
+                        <option value="OFICIAL">OFICIAL</option>
+                        <option value="NO_OFICIAL">NO OFICIAL</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="COLE_COD_DANE_ESTABLECIMIENTO">COLE_COD_DANE_ESTABLECIMIENTO</label>
+                    <select id="COLE_COD_DANE_ESTABLECIMIENTO" class="form-select">
+                        <option value="123456">123456</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="COLE_DEPTO_UBICACION">COLE_DEPTO_UBICACION</label>
+                    <select id="COLE_DEPTO_UBICACION" class="form-select" onchange="updateMunicipios()">
+                        <option value="AMAZONAS">AMAZONAS</option>
+                        <option value="ANTIOQUIA">ANTIOQUIA</option>
+                        <option value="ARAUCA">ARAUCA</option>
+                        <option value="ATLÁNTICO">ATLÁNTICO</option>
+                        <option value="BOLÍVAR">BOLÍVAR</option>
+                        <option value="BOYACÁ">BOYACÁ</option>
+                        <option value="CALDAS">CALDAS</option>
+                        <option value="CAQUETÁ">CAQUETÁ</option>
+                        <option value="CASANARE">CASANARE</option>
+                        <option value="CAUCA">CAUCA</option>
+                        <option value="CESAR">CESAR</option>
+                        <option value="CHOCÓ">CHOCÓ</option>
+                        <option value="CÓRDOBA">CÓRDOBA</option>
+                        <option value="CUNDINAMARCA">CUNDINAMARCA</option>
+                        <option value="GUAINÍA">GUAINÍA</option>
+                        <option value="GUAVIARE">GUAVIARE</option>
+                        <option value="HUILA">HUILA</option>
+                        <option value="LA GUAJIRA">LA GUAJIRA</option>
+                        <option value="MAGDALENA">MAGDALENA</option>
+                        <option value="META">META</option>
+                        <option value="NARIÑO">NARIÑO</option>
+                        <option value="NORTE DE SANTANDER">NORTE DE SANTANDER</option>
+                        <option value="PUTUMAYO">PUTUMAYO</option>
+                        <option value="QUINDÍO">QUINDÍO</option>
+                        <option value="RISARALDA">RISARALDA</option>
+                        <option value="SAN ANDRÉS Y PROVIDENCIA">SAN ANDRÉS Y PROVIDENCIA</option>
+                        <option value="SANTANDER">SANTANDER</option>
+                        <option value="SUCRE">SUCRE</option>
+                        <option value="TOLIMA">TOLIMA</option>
+                        <option value="VALLE DEL CAUCA">VALLE DEL CAUCA</option>
+                        <option value="VAUPÉS">VAUPÉS</option>
+                        <option value="VICHADA">VICHADA</option>
+                        <option value="BOGOTÁ, D.C.">BOGOTÁ, D.C.</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="COLE_MCIO_UBICACION">COLE_MCIO_UBICACION</label>
+                    <select id="COLE_MCIO_UBICACION" class="form-select">
+                        <option value="">Selecciona un municipio</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="COLE_NOMBRE_ESTABLECIMIENTO">COLE_NOMBRE_ESTABLECIMIENTO</label>
+                    <select id="COLE_NOMBRE_ESTABLECIMIENTO" class="form-select" onchange="updateCodigoDane()">
+                        <option value="INSTITUCION EDUCATIVA EJEMPLO">INSTITUCION EDUCATIVA EJEMPLO</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="ESTU_DEPTO_PRESENTACION">ESTU_DEPTO_PRESENTACION</label>
+                    <select id="ESTU_DEPTO_PRESENTACION" class="form-select">
+                        <option value="BOGOTA">BOGOTA</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="ESTU_MCIO_PRESENTACION">ESTU_MCIO_PRESENTACION</label>
+                    <select id="ESTU_MCIO_PRESENTACION" class="form-select">
+                        <option value="BOGOTA">BOGOTA</option>
+                    </select>
+                </div>
                 
-                <select id="COLE_NOMBRE_ESTABLECIMIENTO" class="form-select" onchange="updateCodigoDane()">
-                    <option value="INSTITUCION EDUCATIVA EJEMPLO">INSTITUCION EDUCATIVA EJEMPLO</option>
-                </select>
-
-                <label for="ESTU_DEPTO_PRESENTACION">ESTU_DEPTO_PRESENTACION</label>
-                <select id="ESTU_DEPTO_PRESENTACION" class="form-select">
-                    <option value="BOGOTA">BOGOTA</option>
-                </select>
-
-                <label for="ESTU_MCIO_PRESENTACION">ESTU_MCIO_PRESENTACION</label>
-                <select id="ESTU_MCIO_PRESENTACION" class="form-select">
-                    <option value="BOGOTA">BOGOTA</option>
-                </select>
-                 
-                <label for="ESTU_FECHANACIMIENTO">ESTU_FECHANACIMIENTO</label>
-                <input type="date" id="ESTU_FECHANACIMIENTO" name="ESTU_FECHANACIMIENTO" class="form-select">
-
-                <label for="ESTU_GENERO">ESTU_GENERO</label>
-                <select id="ESTU_GENERO" class="form-select">
-                    <option value="M">M</option>
-                    <option value="F">F</option>
-                </select>
-
-                <label for="FAMI_ESTRATOVIVIENDA">FAMI_ESTRATOVIVIENDA</label>
-                <select id="FAMI_ESTRATOVIVIENDA" class="form-select">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                </select>
-
+                <div class="form-group">
+                    <label for="ESTU_FECHANACIMIENTO">ESTU_FECHANACIMIENTO</label>
+                    <input type="date" id="ESTU_FECHANACIMIENTO" name="ESTU_FECHANACIMIENTO" class="form-select">
+                </div>
+            
+                <div class="form-group">
+                    <label for="ESTU_GENERO">ESTU_GENERO</label>
+                    <select id="ESTU_GENERO" class="form-select">
+                        <option value="M">M</option>
+                        <option value="F">F</option>
+                    </select>
+                </div>
+            
+                <div class="form-group">
+                    <label for="FAMI_ESTRATOVIVIENDA">FAMI_ESTRATOVIVIENDA</label>
+                    <select id="FAMI_ESTRATOVIVIENDA" class="form-select">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
+            
                 <div class="button-container">
                     <button class="button" onclick="hacerPrediccion()">Hacer Predicción</button>
                 </div>
