@@ -454,7 +454,7 @@ button:active {
     height: 100%;
 }
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .form-group label {
@@ -479,7 +479,7 @@ button:active {
 
 .button {
     padding: 10px 20px;
-    background-color: #0e3bcf;
+    background-color: #000000;
     color: white;
     border: none;
     border-radius: 4px;
@@ -488,5 +488,5 @@ button:active {
 }
 
 .button:hover {
-    background-color: #0b3191;
+    background-color: #848da3;
 }
