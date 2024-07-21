@@ -447,7 +447,7 @@ button:active {
     background-color: #000000;
     border-radius: 5% ;
     color: #fff;
-    font-family: cursive;
+    font-family: sans-serif;
 }
 .form-container-predict fieldset {
     border: none;
@@ -458,7 +458,8 @@ button:active {
 .form-container-predict select {
     width: 100%;
     padding: 5px;
-    margin-top: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .header-link {
     color: white; /* Adjust text color */
