@@ -432,6 +432,7 @@ button:active {
     justify-content: center;
     background-color: #000000;
     border-radius: 5% ;
+    color: #fff;
 }
 .form-container-predict fieldset {
     border: none;
