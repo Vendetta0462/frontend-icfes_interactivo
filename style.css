@@ -418,6 +418,7 @@ button:active {
 .chatbot-bubble .chat-icon {
     width: 70%; /* Adjust the size of the icon */
     height: 70%;
+    margin-left: 10px;
 }
 
 .chatbot-bubble:hover {
