@@ -1,3 +1,5 @@
+HOST = "http://181.236.87.123:5000"
+
 document.addEventListener('DOMContentLoaded', function() {
     
     /*ESTILO MAPA AL DAR CLICK */
@@ -21,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //color del mapa
 document.addEventListener('DOMContentLoaded', () => {
-    const dataUrl = 'http://18.222.24.209/saber11/promedios_departamento_year';
+    const dataUrl = HOST + '/saber11/promedios_departamento_year';
     const paths = document.querySelectorAll('.delimPath11');
     const sliderMin = document.getElementById('range-slider-min-saber11');
     const sliderMax = document.getElementById('range-slider-max-saber11');
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //graficos del slider
 document.addEventListener('DOMContentLoaded', () => {
-    const chartDataUrl = 'http://18.222.24.209/saber11/promedios_colombia_year';
+    const chartDataUrl = HOST + '/saber11/promedios_colombia_year';
     const sliderMin = document.getElementById('range-slider-min-saber11');
     const sliderMax = document.getElementById('range-slider-max-saber11');
     const minYearDisplay = document.getElementById('min-year-saber11');
@@ -283,18 +285,463 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
+let myChart11;
+
+// Mostrar/ocultar secciones
+document.addEventListener('DOMContentLoaded', () => {
+    const saber11Button = document.getElementById('saber11-button');
+    const saberProButton = document.getElementById('saberPro-button');
+    const saber11Section = document.getElementById('saber11-section');
+    const saberProSection = document.getElementById('saberPro-section');
+
+    saber11Button.addEventListener('click', () => {
+        saber11Section.style.display = 'block';
+        saberProSection.style.display = 'none';
+    });
+
+    saberProButton.addEventListener('click', () => {
+        saber11Section.style.display = 'none';
+        saberProSection.style.display = 'block';
+    });
+});
+
+// seleccionar departamento y consultar municipios
+document.addEventListener('DOMContentLoaded', () => {
+    const sliderMinPro = document.getElementById('range-slider-min-saber11');
+    const sliderMaxPro = document.getElementById('range-slider-max-saber11');
+    const consultarButton = document.getElementById('consultar-button11');
+    const txtDepartamento11 = document.getElementById('txtDepartamento11');
+    const filtros = document.querySelector('.filtros11');
+    const grafico = document.querySelector('.grafico');
+    let selectedDepartment = null;
+
+    // Ensure required elements are present in the DOM
+    if (!sliderMinPro || !sliderMaxPro || !consultarButton || !txtDepartamento11 || !filtros) {
+        console.error('Missing required elements in the DOM');
+        return;
+    }
+
+    // Add click event listener to the consultar button
+    consultarButton.addEventListener('click', fetchData);
+
+    // Start grafica
+
+
+    // Add click event listeners to map paths
+    const paths11 = document.querySelectorAll('.delimPath11');
+    
+    paths11.forEach(path => {
+        path.addEventListener('click', (event) => {
+            const parentNode = event.target.parentNode;
+            if (parentNode && parentNode.hasAttribute('xlink:title')) {
+                const name = parentNode.getAttribute('xlink:title');
+                selectedDepartment = name; // Update selectedDepartment when a department is clicked
+
+                // Update the text and style of the department display element
+                const texto = name;
+                const estilo = "color: #0e3bcf; font-size: 30px; font-weight: bold; text-align: center;";
+                txtDepartamento11.textContent = texto;
+                txtDepartamento11.style = estilo;
+
+                localStorage.setItem("Departamento", texto); // Store the selected department in localStorage
+            } else {
+                console.error('Parent node does not have xlink:title attribute');
+            }
+        });
+    });
+
+    function crearGrafica(data) {
+        const canvas = document.getElementById('grafico');
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+            console.error('No se pudo obtener el contexto 2D del elemento <canvas>.');
+            return;
+        }
+    
+        const labels = data.map(d => d.year);
+        const datasets = [
+            {
+                label: 'Puntaje Global',
+                data: data.map(d => d.promedio_global),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Inglés',
+                data: data.map(d => d.promedio_ingles),
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Matemáticas',
+                data: data.map(d => d.promedio_matematicas),
+                borderColor: 'rgba(255, 206, 86, 1)',
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Ciencias Naturales',
+                data: data.map(d => d.promedio_c_naturales),
+                borderColor: 'rgba(153, 102, 255, 1)',
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Sociales y Ciudadanas',
+                data: data.map(d => d.promedio_sociales_ciudadanas),
+                borderColor: 'rgba(255, 159, 64, 1)',
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Lectura Crítica',
+                data: data.map(d => d.promedio_lectura_critica),
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 1
+            }
+        ];
+    
+        if (myChart11) {
+            myChart11.destroy();
+        }
+    
+        myChart11 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Año'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Puntaje'
+                        }
+                    }
+                }
+            }
+        });
+    }   
+
+
+    // Function to manually parse the text data
+    
+    function fetchData() {
+        // Ensure a department is selected before making the fetch request
+        if (!selectedDepartment) {
+            alert("Por favor, seleccione un departamento.");
+            return;
+        }
+    
+        const minYear = parseInt(sliderMinPro.value);
+        const maxYear = parseInt(sliderMaxPro.value);
+        const url_consulta = HOST + `/saber11/consulta_inicial?departamento=${selectedDepartment}&start=${minYear}&end=${maxYear}`;
+    
+        const municipiosList = document.getElementById('municipios-list');
+        var municipioDefault = 0;
+        const url_municipio = HOST + `/saber11/consulta_inicial/municipios`;
+        
+        municipiosList.style.display = 'block';
+        
+        const selectMcipios = document.getElementById('municipio');
+
+        
+        const visualizacionSelect = document.getElementById('filtros');
+        visualizacionSelect.value = 'historico'
+    
+        // Fetch data from the specified URL
+        fetch(url_consulta, {mode: 'no-cors'})
+            .then(response => response.text()) // Get response as text
+            .then(textData => {
+                console.log('Fetched text data:', textData);
+                // Attempt to parse text data as JSON-like structure
+                let data = textData;
+                console.log('Parsed data:', data);
+                filtros.classList.remove('hidden');
+                grafico.classList.remove('hidden'); // Show the filters section
+                // Update the charts or data here based on the parsed data
+            })
+            .catch(error => console.error('Error fetching data:', error))
+            .then(() => {
+                return fetch(url_municipio); // Fetch the municipalities data
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error fetching municipios');
+                }
+                return response.json();
+            })
+            .then(municipios => {
+                console.log('Fetched municipios:', municipios);
+                selectMcipios.innerHTML = ''; // Clear existing options
+                
+                // Add a default empty option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = 'DEPARTAMENTO';
+                defaultOption.text = 'DEPARTAMENTO';
+                selectMcipios.appendChild(defaultOption);
+                
+                // Add the fetched municipios options
+                for (var i = 0; i < municipios.length; i++) {
+                    const nuevoElemento = municipios[i];
+                    const newOption = document.createElement('option');
+                    newOption.value = nuevoElemento; // Assuming municipio name or id is the value
+                    newOption.text = nuevoElemento; // Assuming municipio name is the text
+                    selectMcipios.appendChild(newOption); 
+                }
+                municipioDefault = municipios[0];
+                console.log('Municipio default:', municipioDefault);
+            })
+            .then(() => {
+                return fetch(HOST + `/saber11/consultas/${visualizacionSelect.value}?municipio=`); 
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error fetching datos default');
+                }
+                return response.json();
+            })
+            .then(textData => {
+                console.log('Fetched text data:', textData);
+                // Attempt to parse text data as JSON-like structure
+                let data = textData;
+                console.log('Parsed data:', data);
+                crearGrafica(data);
+            })
+            .catch(error => console.error('Error:', error));
+    }
+});
+
+
+// consulta por municipio y obtencion de datos
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Obtener referencias a los elementos
+    const municipioSelect = document.getElementById('municipio');
+    const visualizacionSelect = document.getElementById('filtros');
+    const grafico = document.getElementById('grafico').getContext('2d');
+    
+
+    // Función para obtener datos de la API
+    function fetchData(url, callback, json) {
+        if (json) {
+            fetch(url)
+            .then(response => response.json())
+            .then(data => callback(data))
+            .catch(error => console.error('Error fetching data:', error));
+        } else {
+            fetch(url)
+            .then(response => response.text())
+            .then(data => callback(data))
+            .catch(error => console.error('Error fetching data:', error));
+        }
+    }
+
+    // Función para manejar cambios en el selector de municipios
+    function handleMunicipioChange() {
+        const municipio = municipioSelect.value;
+
+        // Realizar consulta de municipios
+        const urlMunicipio = HOST + `/saber11/consulta_municipio?municipio=${municipio}`;
+
+        fetchData(urlMunicipio, function(data) {
+            console.log('Datos de municipios:', data);
+            // Procesar los datos de municipios si es necesario
+
+            // Luego realizar la consulta según la visualización seleccionada
+            handleSelectionChange();
+        }, json=false);
+    }
+
+    // Función para manejar cambios en el selector de visualización
+    function handleSelectionChange() {
+        const municipio = municipioSelect.value;
+        const visualizacion = visualizacionSelect.value;
+
+        // Construir la URL de la API con los valores seleccionados
+        const url = HOST + `/saber11/consultas/${visualizacion}?municipio=${municipio}`;
+
+        fetchData(url, function(data) {
+            console.log(`Datos de ${visualizacion} para ${municipio}:`, data);
+            // Procesar los datos y actualizar la interfaz de usuario según sea necesario
+            actualizarGrafica(data); 
+        }, json=true);
+    }
+
+    // Adjuntar manejadores de eventos a los selectores y botón
+    municipioSelect.addEventListener('change', handleMunicipioChange);
+    visualizacionSelect.addEventListener('change', handleSelectionChange);
+
+    // Obtener datos iniciales para llenar el selector de municipios
+    // fetchData(HOST + `/saber11/consulta_municipio?municipio=${municipio}`, function(data) {
+    //     data.forEach(municipio => {
+    //         const option = document.createElement('option');
+    //         option.value = municipio;
+    //         option.textContent = municipio;
+    //         municipioSelect.appendChild(option);
+    //     });
+
+    
+    // });
+
+        
+    function actualizarGrafica(data) {
+        const tipoVisualizacion = visualizacionSelect.value;
+        let labels;
+        let datasets;
+
+        if (tipoVisualizacion === 'historico') {
+            labels = data.map(d => d.year);
+            datasets = [
+                {
+                    label: 'Puntaje Global',
+                    data: data.map(d => d.promedio_global),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Inglés',
+                    data: data.map(d => d.promedio_ingles),
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Matemáticas',
+                    data: data.map(d => d.promedio_matematicas),
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Ciencias Naturales',
+                    data: data.map(d => d.promedio_c_naturales),
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Sociales y Ciudadanas',
+                    data: data.map(d => d.promedio_sociales_ciudadanas),
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Lectura Crítica',
+                    data: data.map(d => d.promedio_lectura_critica),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 1
+                }
+            ];
+        } else if (tipoVisualizacion === 'estrato') {
+            const estratos = data.map(d => d.Estrato);
+            labels = estratos;
+            datasets = [
+                {
+                    label: 'Puntaje Global',
+                    data: data.map(d => d.promedio_global),
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Inglés',
+                    data: data.map(d => d.promedio_ingles),
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Matemáticas',
+                    data: data.map(d => d.promedio_matematicas),
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Ciencias Naturales',
+                    data: data.map(d => d.promedio_c_naturales),
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Sociales y Ciudadanas',
+                    data: data.map(d => d.promedio_sociales_ciudadanas),
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Lectura Crítica',
+                    data: data.map(d => d.promedio_lectura_critica),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 1
+                }
+            ];
+        }
+
+        if (myChart11) {
+            myChart11.destroy()
+        }
+
+        const chartType = tipoVisualizacion === 'historico' ? 'line' : 'bar';
+
+        myChart11 = new Chart(grafico, {
+            type: chartType,
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: tipoVisualizacion === 'historico' ? 'Año' : 'Estrato'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Promedio Global'
+                        }
+                    }
+                }
+            }
+        });
+    };
+});
+
 
 //SABERPRO
 
 //color del mapa
 document.addEventListener('DOMContentLoaded', () => {
-    const dataUrlPro = 'http://18.222.24.209/saberpro/promedios_departamento_year';
-    const pathsPro = document.querySelectorAll('.delimPathPro');
+    const dataUrlPro = HOST + '/saberpro/promedios_departamento_year';
+    const paths11 = document.querySelectorAll('.delimPathPro');
     const sliderMinPro = document.getElementById('range-slider-min-saberpro');
     const sliderMaxPro = document.getElementById('range-slider-max-saberpro');
     const minYearDisplayPro = document.getElementById('min-year-saberpro');
     const maxYearDisplayPro = document.getElementById('max-year-saberpro');
-    const popupPro = document.getElementById('infoPro');
+    const popupPro = document.getElementById('txtDepartamentoPro');
     let selectedPrueba = 'promedio_c_ciudadana';
 
     function getColorPro(value) {
@@ -307,7 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateColorsPro(minYear, maxYear, data) {
-        pathsPro.forEach(path => {
+        paths11.forEach(path => {
             const departmentName = path.parentNode.getAttribute('xlink:title');
             if (!departmentName) return;
             const departmentData = data.filter(d => d.departamento === departmentName && parseInt(d.year) >= minYear && parseInt(d.year) <= maxYear);
@@ -370,21 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 updatePro();
             });
 
-            pathsPro.forEach(path => {
-                path.addEventListener('mouseenter', (event) => {
-                    const name = event.target.parentNode.getAttribute('xlink:title');
-                    if (!name) return;
-                    const rect = event.target.getBoundingClientRect();
-                    popupPro.style.display = 'block';
-                    popupPro.style.left = `${rect.left + window.scrollX}px`;
-                    popupPro.style.top = `${rect.top + window.scrollY}px`;
-                    popupPro.textContent = `Información de ${name}`;
-                });
-
-                path.addEventListener('mouseleave', () => {
-                    popupPro.style.display = 'none';
-                });
-            });
+            
 
             updatePro();
 
@@ -404,7 +837,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //graficos del slider
 document.addEventListener('DOMContentLoaded', () => {
-    const chartDataUrlPro = 'http://18.222.24.209/saberpro/promedios_colombia_year';
+    const chartDataUrlPro = HOST + '/saberpro/promedios_colombia_year';
     const sliderMinPro = document.getElementById('range-slider-min-saberpro');
     const sliderMaxPro = document.getElementById('range-slider-max-saberpro');
     const minYearDisplayPro = document.getElementById('min-year-saberpro');
@@ -459,7 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 borderWidth: 1
             },
             {
-                label: 'Puntaje Razonamiento cuantitativo',
+                label: 'Puntaje Razonamiento Cuantitativo',
                 data: promedio_razona_cuantitativo,
                 borderColor: 'rgba(255, 159, 64, 1)',
                 backgroundColor: 'rgba(255, 159, 64, 0.2)',
@@ -581,52 +1014,29 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-
-
-
-// Mostrar/ocultar secciones
-document.addEventListener('DOMContentLoaded', () => {
-    const saber11Button = document.getElementById('saber11-button');
-    const saberProButton = document.getElementById('saberPro-button');
-    const saber11Section = document.getElementById('saber11-section');
-    const saberProSection = document.getElementById('saberPro-section');
-
-    saber11Button.addEventListener('click', () => {
-        saber11Section.style.display = 'block';
-        saberProSection.style.display = 'none';
-    });
-
-    saberProButton.addEventListener('click', () => {
-        saber11Section.style.display = 'none';
-        saberProSection.style.display = 'block';
-    });
-});
-
 // seleccionar departamento y consultar municipios
+let myChartPro;
 document.addEventListener('DOMContentLoaded', () => {
-    const sliderMinPro = document.getElementById('range-slider-min-saber11');
-    const sliderMaxPro = document.getElementById('range-slider-max-saber11');
-    const consultarButton = document.getElementById('consultar-button11');
-    const txtDepartamento = document.getElementById('txtDepartamento11');
-    const txtDepartamento11 = document.getElementById('txtDepartamentoPro');
-    const filtros = document.querySelector('.filtros11');
-    const grafico = document.querySelector('.grafico');
+    const sliderMinPro = document.getElementById('range-slider-min-saberpro');
+    const sliderMaxPro = document.getElementById('range-slider-max-saberpro');
+    const consultarButtonPro = document.getElementById('consultar-buttonPro');
+    const txtDepartamentoPro = document.getElementById('txtDepartamentoPro');
+    const filtrosPro = document.querySelector('.filtrosPro');
+    const graficoPro = document.querySelector('.graficoPro');
     let selectedDepartment = null;
 
     // Ensure required elements are present in the DOM
-    if (!sliderMinPro || !sliderMaxPro || !consultarButton || !txtDepartamento || !filtros) {
+    if (!sliderMinPro || !sliderMaxPro || !consultarButtonPro || !txtDepartamentoPro || !filtrosPro) {
         console.error('Missing required elements in the DOM');
         return;
     }
 
     // Add click event listener to the consultar button
-    consultarButton.addEventListener('click', fetchData);
-
-    // Start grafica
-
+    consultarButtonPro.addEventListener('click', fetchDataPro);
 
     // Add click event listeners to map paths
-    const pathsPro = document.querySelectorAll('.delimPath11', 'delimPathPro');
+    const pathsPro = document.querySelectorAll('.delimPathPro');
+    
     pathsPro.forEach(path => {
         path.addEventListener('click', (event) => {
             const parentNode = event.target.parentNode;
@@ -637,10 +1047,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Update the text and style of the department display element
                 const texto = name;
                 const estilo = "color: #0e3bcf; font-size: 30px; font-weight: bold; text-align: center;";
-                txtDepartamento.textContent = texto;
-                txtDepartamento.style = estilo;
-                txtDepartamento11.textContent = texto;
-                txtDepartamento11.style = estilo;
+                txtDepartamentoPro.textContent = texto;
+                txtDepartamentoPro.style = estilo;
 
                 localStorage.setItem("Departamento", texto); // Store the selected department in localStorage
             } else {
@@ -649,11 +1057,92 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
-
-    // Function to manually parse the text data
+    function crearGraficaPro(data) {
+        const canvas = document.getElementById('graficoPro');
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+            console.error('No se pudo obtener el contexto 2D del elemento <canvas>.');
+            return;
+        }
     
-    function fetchData() {
+        const labels = data.map(d => d.year);
+        const datasets = [
+            {
+                label: 'Puntaje Global',
+                data: data.map(d => d.promedio_global),
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Inglés',
+                data: data.map(d => d.promedio_ingles),
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Matemáticas',
+                data: data.map(d => d.promedio_matematicas),
+                borderColor: 'rgba(255, 206, 86, 1)',
+                backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Ciencias Naturales',
+                data: data.map(d => d.promedio_c_naturales),
+                borderColor: 'rgba(153, 102, 255, 1)',
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Sociales y Ciudadanas',
+                data: data.map(d => d.promedio_sociales_ciudadanas),
+                borderColor: 'rgba(255, 159, 64, 1)',
+                backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                borderWidth: 1
+            },
+            {
+                label: 'Puntaje Lectura Crítica',
+                data: data.map(d => d.promedio_lectura_critica),
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 1
+            }
+        ];
+    
+        if (myChartPro) {
+            myChartPro.destroy();
+        }
+    
+        myChartPro = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Año'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Puntaje'
+                        }
+                    }
+                }
+            }
+        });
+    }   
+
+    function fetchDataPro() {
         // Ensure a department is selected before making the fetch request
         if (!selectedDepartment) {
             alert("Por favor, seleccione un departamento.");
@@ -662,34 +1151,30 @@ document.addEventListener('DOMContentLoaded', () => {
     
         const minYear = parseInt(sliderMinPro.value);
         const maxYear = parseInt(sliderMaxPro.value);
-        const url_consulta = `http://18.222.24.209/saber11/consulta_inicial?departamento=${selectedDepartment}&start=${minYear}&end=${maxYear}`;
+        const url_consulta = HOST + `/saberpro/consulta_inicial?departamento=${selectedDepartment}&start=${minYear}&end=${maxYear}`;
     
         const municipiosList = document.getElementById('municipios-list');
         var municipioDefault = 0;
-        const url_municipio = `http://18.222.24.209/saber11/consulta_inicial/municipios`;
+        const url_municipio = HOST + `/saberpro/consulta_inicial/municipios`;
         
         municipiosList.style.display = 'block';
         
-        const selectMcipios = document.getElementById('municipio');
-
-        
-        const visualizacionSelect = document.getElementById('filtros');
+        const selectMcipios = document.getElementById('municipioP');
+        const visualizacionSelect = document.getElementById('filtrosP');
+        visualizacionSelect.value = 'historico';
     
-        // Fetch data from the specified URL
-        fetch(url_consulta)
-            .then(response => response.text()) // Get response as text
+        fetch(url_consulta, {mode: 'no-cors'})
+            .then(response => response.text())
             .then(textData => {
                 console.log('Fetched text data:', textData);
-                // Attempt to parse text data as JSON-like structure
-                let data = textData;
                 console.log('Parsed data:', data);
-                filtros.classList.remove('hidden');
-                grafico.classList.remove('hidden'); // Show the filters section
-                // Update the charts or data here based on the parsed data
+                filtrosPro.classList.remove('hidden');
+                graficoPro.classList.remove('hidden');
+                crearGraficaPro(data);
             })
             .catch(error => console.error('Error fetching data:', error))
             .then(() => {
-                return fetch(url_municipio); // Fetch the municipalities data
+                return fetch(url_municipio);
             })
             .then(response => {
                 if (!response.ok) {
@@ -699,27 +1184,23 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(municipios => {
                 console.log('Fetched municipios:', municipios);
-                selectMcipios.innerHTML = ''; // Clear existing options
-                
-                // Add a default empty option
+                selectMcipios.innerHTML = '';
                 const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.text = 'Seleccione';
+                defaultOption.value = 'DEPARTAMENTO';
+                defaultOption.text = 'DEPARTAMENTO';
                 selectMcipios.appendChild(defaultOption);
                 
-                // Add the fetched municipios options
-                for (var i = 0; i < municipios.length; i++) {
-                    const nuevoElemento = municipios[i];
+                municipios.forEach(municipio => {
                     const newOption = document.createElement('option');
-                    newOption.value = nuevoElemento; // Assuming municipio name or id is the value
-                    newOption.text = nuevoElemento; // Assuming municipio name is the text
+                    newOption.value = municipio;
+                    newOption.text = municipio;
                     selectMcipios.appendChild(newOption); 
-                }
+                });
                 municipioDefault = municipios[0];
                 console.log('Municipio default:', municipioDefault);
             })
             .then(() => {
-                return fetch(`http://18.222.24.209/saber11/consultas/${visualizacionSelect.value}?municipio=`); 
+                return fetch(HOST + `/saberpro/consultas/${visualizacionSelect.value}?municipio=`);
             })
             .then(response => {
                 if (!response.ok) {
@@ -729,247 +1210,176 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .then(textData => {
                 console.log('Fetched text data:', textData);
-                // Attempt to parse text data as JSON-like structure
                 let data = textData;
                 console.log('Parsed data:', data);
+                crearGraficaPro(data);
             })
             .catch(error => console.error('Error:', error));
     }
 });
 
-
 // consulta por municipio y obtencion de datos
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Obtener referencias a los elementos
-    const municipioSelect = document.getElementById('municipio');
-    const visualizacionSelect = document.getElementById('filtros');
-    const consultarBtn = document.getElementById('consultar-button11');
+    const municipioSelect = document.getElementById('municipioP');
+    const visualizacionSelect = document.getElementById('filtrosP');
+    const graficoPro = document.getElementById('graficoPro').getContext('2d');
 
-    // Función para obtener datos de la API
-    function fetchData(url, callback) {
-        fetch(url)
+    function fetchData(url, callback, json) {
+        if (json) {
+            fetch(url)
             .then(response => response.json())
             .then(data => callback(data))
             .catch(error => console.error('Error fetching data:', error));
-    }
-
-    // Función para manejar el clic en el botón de consulta
-    function handleConsultarClick() {
-        const municipio = municipioSelect.value;
-
-        if (municipio !== 'Seleccione') {
-            // Realizar la consulta histórica por defecto
-            const urlHistorico = `http://18.222.24.209/saber11/consultas/historico?municipio=${municipio}`;
-
-            fetchData(urlHistorico, function(data) {
-                console.log('Datos históricos:', data);
-                // Procesar los datos y actualizar la interfaz de usuario según sea necesario
-            });
+        } else {
+            fetch(url)
+            .then(response => response.text())
+            .then(data => callback(data))
+            .catch(error => console.error('Error fetching data:', error));
         }
     }
 
-    // Función para manejar cambios en el selector de municipios
     function handleMunicipioChange() {
         const municipio = municipioSelect.value;
+        const urlMunicipio = HOST + `/saberpro/consulta_municipio?municipio=${municipio}`;
 
-        if (municipio !== 'Seleccione') {
-            // Realizar consulta de municipios
-            const urlMunicipio = `http://18.222.24.209/saber11/consulta_municipio`;
-
-            fetchData(urlMunicipio, function(data) {
-                console.log('Datos de municipios:', data);
-                // Procesar los datos de municipios si es necesario
-
-                // Luego realizar la consulta según la visualización seleccionada
-                handleSelectionChange();
-            });
-        }
+        fetchData(urlMunicipio, function(data) {
+            console.log('Datos de municipios:', data);
+            handleSelectionChange();
+        }, json=false);
     }
 
-    // Función para manejar cambios en el selector de visualización
     function handleSelectionChange() {
         const municipio = municipioSelect.value;
         const visualizacion = visualizacionSelect.value;
+        const url = HOST + `/saberpro/consultas/${visualizacion}?municipio=${municipio}`;
 
-        if (municipio !== 'Seleccione') {
-            // Construir la URL de la API con los valores seleccionados
-            const url = `http://18.222.24.209/saber11/consultas/${visualizacion}?municipio=${municipio}`;
-
-            fetchData(url, function(data) {
-                console.log(`Datos de ${visualizacion} para ${municipio}:`, data);
-                // Procesar los datos y actualizar la interfaz de usuario según sea necesario
-            });
-        }
+        fetchData(url, function(data) {
+            console.log(`Datos de ${visualizacion} para ${municipio}:`, data);
+            actualizarGraficaPro(data);
+        }, json=true);
     }
 
-    // Adjuntar manejadores de eventos a los selectores y botón
     municipioSelect.addEventListener('change', handleMunicipioChange);
     visualizacionSelect.addEventListener('change', handleSelectionChange);
 
-    // Obtener datos iniciales para llenar el selector de municipios
-    // fetchData(`http://18.222.24.209/saber11/consulta_municipio?municipio=${municipio}`, function(data) {
-    //     data.forEach(municipio => {
-    //         const option = document.createElement('option');
-    //         option.value = municipio;
-    //         option.textContent = municipio;
-    //         municipioSelect.appendChild(option);
-    //     });
-    // });
+    function actualizarGraficaPro(data) {
+        const tipoVisualizacion = visualizacionSelect.value;
+        let labels;
+        let datasets;
+
+        if (tipoVisualizacion === 'historico') {
+            labels = data.map(d => d.year);
+            datasets = [
+                {
+                    label: 'Puntaje Ciencias Ciudadanas',
+                    data: data.map(d => d.promedio_c_ciudadana),
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Comunicacion Escrita',
+                    data: data.map(d => d.promedio_comuni_escrita),
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Ingles',
+                    data: data.map(d => d.promedio_ingles),
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Lectura Critica',
+                    data: data.map(d => d.promedio_lectura_critica),
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Razonamiento Cuantitativo',
+                    data: data.map(d => d.promedio_razona_cuantitativo),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 1
+                }
+            ];
+        } else if (tipoVisualizacion === 'estrato') {
+            const estratos = data.map(d => d.Estrato);
+            labels = estratos;
+            datasets = [
+                {
+                    label: 'Puntaje Ciencias Ciudadanas',
+                    data: data.map(d => d.promedio_c_ciudadana),
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Comunicacion Escrita',
+                    data: data.map(d => d.promedio_comuni_escrita),
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Ingles',
+                    data: data.map(d => d.promedio_ingles),
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Lectura Critica',
+                    data: data.map(d => d.promedio_lectura_critica),
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Puntaje Razonamiento Cuantitativo',
+                    data: data.map(d => d.promedio_razona_cuantitativo),
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 1
+                }
+            ];
+        }
+
+        if (myChartPro) {
+            myChartPro.destroy();
+        }
+
+        const chartType = tipoVisualizacion === 'historico' ? 'line' : 'bar';
+
+        myChartPro = new Chart(graficoPro, {
+            type: chartType,
+            data: {
+                labels: labels,
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: tipoVisualizacion === 'historico' ? 'Año' : 'Estrato'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Promedio Global'
+                        }
+                    }
+                }
+            }
+        });
+    }
 });
 
 
-//sssss
-// document.addEventListener('DOMContentLoaded', function() {
-//     // Obtener referencias a los elementos
-//     const municipioSelect = document.getElementById('municipio');
-//     const visualizacionSelect = document.getElementById('filtros');
-//     const sliderMin = document.getElementById('range-slider-min-saber11');
-//     const sliderMax = document.getElementById('range-slider-max-saber11');
-//     const ctx = document.getElementById('myChart').getContext('2d');
-    
-//     let myChart;
-
-//     // Función para obtener datos de la API
-//     function fetchData(url, callback) {
-//         fetch(url)
-//             .then(response => response.json())
-//             .then(data => callback(data))
-//             .catch(error => console.error('Error fetching data:', error));
-//     }
-
-//     // Función para actualizar el gráfico
-//     function updateChart(labels, datasets) {
-//         if (myChart) {
-//             myChart.destroy();
-//         }
-//         myChart = new Chart(ctx, {
-//             type: 'line', // Tipo de gráfico
-//             data: {
-//                 labels: labels,
-//                 datasets: datasets
-//             },
-//             options: {
-//                 responsive: true,
-//                 scales: {
-//                     x: {
-//                         title: {
-//                             display: true,
-//                             text: 'Periodo' // Etiqueta del eje X
-//                         }
-//                     },
-//                     y: {
-//                         title: {
-//                             display: true,
-//                             text: 'Valor' // Etiqueta del eje Y
-//                         }
-//                     }
-//                 }
-//             }
-//         });
-//     }
-
-//     // Función para manejar la consulta y actualización del gráfico
-//     function handleConsulta(tipoConsulta, municipio) {
-//         const minYear = parseInt(sliderMin.value);
-//         const maxYear = parseInt(sliderMax.value);
-//         let url = `http://18.222.24.209/saber11/consultas/${tipoConsulta}?municipio=${encodeURIComponent(municipio)}`;
-
-//         if (tipoConsulta === 'historico') {
-//             url += `&start=${minYear}&end=${maxYear}`;
-//         }
-
-//         fetchData(url, function(data) {
-//             console.log(`Datos de ${tipoConsulta} para ${municipio}:`, data);
-            
-//             // Definir las etiquetas y los datasets
-//             let labels, datasets;
-
-//             if (tipoConsulta === 'historico') {
-//                 labels = Array.from({length: maxYear - minYear + 1}, (v, k) => k + minYear);
-//                 datasets = [{
-//                     label: 'Histórico',
-//                     data: data.map(item => item.value), // Ajustar según la estructura de datos
-//                     borderColor: 'rgba(75, 192, 192, 1)',
-//                     borderWidth: 1,
-//                     fill: false
-//                 }];
-//             } else {
-//                 // Para estrato, las etiquetas son del 1 al 6 y se mapea el promedio global
-//                 labels = ['1', '2', '3', '4', '5', '6'];
-//                 datasets = [{
-//                     label: 'Promedio Global',
-//                     data: labels.map(label => {
-//                         const estratoData = data.find(item => item.Estrato === parseInt(label));
-//                         return estratoData ? estratoData.promedio_global : 0;
-//                     }),
-//                     borderColor: 'rgba(192, 75, 192, 1)',
-//                     borderWidth: 1,
-//                     fill: false
-//                 }];
-//             }
-
-//             // Actualizar el gráfico
-//             updateChart(labels, datasets);
-//         });
-//     }
-
-//     // Función para manejar el clic en el botón de consulta
-//     function handleConsultarClick() {
-//         const municipio = municipioSelect.value;
-
-//         if (municipio === 'Seleccione') {
-//             // Mostrar el histórico del departamento
-//             handleConsulta('historico', municipio);
-//         } else {
-//             // Mostrar el histórico del municipio
-//             handleConsulta('historico', municipio);
-//         }
-//     }
-
-//     // Función para manejar cambios en el selector de municipios
-//     function handleMunicipioChange() {
-//         const municipio = municipioSelect.value;
-
-//         if (municipio !== 'Seleccione') {
-//             handleSelectionChange();
-//         } else {
-//             // Mostrar el histórico del departamento por defecto
-//             handleConsulta('historico', municipio);
-//         }
-//     }
-
-//     // Función para manejar cambios en el selector de visualización
-//     function handleSelectionChange() {
-//         const municipio = municipioSelect.value;
-//         const visualizacion = visualizacionSelect.value;
-
-//         if (municipio === 'Seleccione') {
-//             // Mostrar el histórico del departamento
-//             handleConsulta('historico', municipio);
-//         } else {
-//             // Mostrar la visualización seleccionada para el municipio
-//             handleConsulta(visualizacion, municipio);
-//         }
-//     }
-
-//     // Adjuntar manejadores de eventos a los selectores y sliders
-//     municipioSelect.addEventListener('change', handleMunicipioChange);
-//     visualizacionSelect.addEventListener('change', handleSelectionChange);
-//     sliderMin.addEventListener('input', handleSelectionChange);
-//     sliderMax.addEventListener('input', handleSelectionChange);
-
-//     // Obtener datos iniciales para llenar el selector de municipios
-//     fetchData('http://18.222.24.209/saber11/consulta_municipio', function(data) {
-//         data.forEach(municipio => {
-//             const option = document.createElement('option');
-//             option.value = municipio;
-//             option.textContent = municipio;
-//             municipioSelect.appendChild(option);
-//         });
-
-//         // Realizar la consulta inicial histórica por defecto
-//         handleConsultarClick();
-//     });
-// });
 

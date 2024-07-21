@@ -226,8 +226,8 @@
                 Selecciona una visualización:
                 <label>
                     <select id="filtros">
-                        <option value="historico" selected>Historico</option>
-                        <option value="estrato">Estrato</option>
+                        <option value="historico" selected>HISTORICO</option>
+                        <option value="estrato">ESTRATO</option>
                       </select>
                 </label>
             </fieldset>
@@ -452,45 +452,64 @@
 </div> 
 
         
-<div id="txtDepartamentoPro" style="height: 34px;"></div>    
-<button id="consultar-buttonPro" class="button">Consultar Información</button>
 
-<div id="info-charts-container">
-    <div id="info-container">
-        <h2>Información Saber 11</h2>
-        <div class="filtros">
-            <div class="form-container">
-                <fieldset class="hidden-list" id="municipios-list-pro">
-                    <legend>Selecciona un municipio:</legend>
-                    <label>
-                        <select id="municipio-pro" class="lstMcipio"></select>
-                    </label>
-                </fieldset>
-                <fieldset id="candidatos-list">
-                    <legend>Selecciona un candidato:</legend>
-                    <label>
-                        <select name="candidato" id="candidato-pro"></select>
-                    </label>
-                </fieldset>
-                <fieldset id="candidatos-irregular-list">
-                    <legend>Candidatos con irregularidades:</legend>
-                    <label>
-                        <select name="candidatoIrregular" id="candidatoIrregular-pro"></select>
-                    </label>
-                </fieldset>
-            </div>
+<div class="row1">
+    <div class="column1 columnsel"> <div id="txtDepartamentoPro" class="departamento1" style="height: 34px;"></div>
+    <div id="new-container" class="hidden-section">
+        <div class="form-container">
+            <div class="filtrosPro hidden">
+           
+    
+            <fieldset id="municipios-list" class="lsi">
+               Selecciona un municipio:
+                <label>
+                    <select id="municipioP" class="lstMcipio"></select>
+                </label>
+            </fieldset>
+            <fieldset id="candidatos-list " class="lsi">
+                Selecciona una visualización:
+                <label>
+                    <select id="filtrosP">
+                        <option value="historico" selected>HISTORICO</option>
+                        <option value="estrato">ESTRATO</option>
+                      </select>
+                </label>
+            </fieldset>
+            
         </div>
+         
+    </div> 
+        <div class="text-column">
+            
+        </div>
+     
+          
     </div>
-    <div id="charts-container">
-        <h2>Gráficas Saber 11</h2>
-        <canvas id="chart-saber11-1"></canvas>
-        <canvas id="chart-saber11-2"></canvas>
-    </div>
+   
 </div>
+    
+   <div class="column2">
+    <div>    <button id="consultar-buttonPro" class="button button-request">Consultar Información</button>
+    </div>
+<div class="graficoPro hidden">
+    <canvas id="graficoPro"></canvas>
+</div>
+</div>
+
+  </div>
 </div>
     </main>
    
-      <script src="scripts.js"></script>
-    </div> 
+      
+    <script src="scripts.js"></script>
+       
+</div> 
+<div class="chatbot-bubble">
+    <a href="predict.html" target="_blank">
+        <img src="C:\Users\jorge\Downloads\font-main\font-main\14558.png" alt="Chatbot" class="chat-icon">
+    </a>
+</div>
+
+
 </body>
 </html>
