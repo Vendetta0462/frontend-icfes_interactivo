@@ -433,11 +433,11 @@ button:active {
     background-color: #000000;
     border-radius: 5% ;
     color: #fff;
+    font-family: cursive;
 }
 .form-container-predict fieldset {
     border: none;
     padding: 10px;
-    justify-content: center;
     font-size: auto;
 }
     
